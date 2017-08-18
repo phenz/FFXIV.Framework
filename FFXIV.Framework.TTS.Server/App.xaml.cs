@@ -90,7 +90,7 @@ namespace FFXIV.Framework.TTS.Server
                 this.logger.Trace("begin.");
 
                 // サーバを終了する
-                TTSServer.Instance.Close();
+                RemoteTTSServer.Instance.Close();
 
                 if (this.taskTrayComponet != null)
                 {
@@ -124,7 +124,7 @@ namespace FFXIV.Framework.TTS.Server
                 this.logger.Info($"{EnvironmentHelper.GetProductName()} {EnvironmentHelper.GetVersion().ToStringShort()}");
 
                 // サーバを開始する
-                TTSServer.Instance.Open();
+                RemoteTTSServer.Instance.Open();
             }
             catch (Exception ex)
             {

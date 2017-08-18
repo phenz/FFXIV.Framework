@@ -36,7 +36,7 @@ namespace FFXIV.Framework.TTS.Server.Views
             this.StateChanged += this.MainView_StateChanged;
         }
 
-        public MainViewModel ViewModel => (MainViewModel)this.DataContext;
+        public MainSimpleViewModel ViewModel => (MainSimpleViewModel)this.DataContext;
 
         public Task<MessageDialogResult> ShowMessageDialogAync(
             string title,

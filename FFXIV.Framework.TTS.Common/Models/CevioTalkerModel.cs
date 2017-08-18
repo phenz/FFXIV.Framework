@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace FFXIV.Framework.TTS.Common.Models
@@ -13,7 +14,7 @@ namespace FFXIV.Framework.TTS.Common.Models
 
         public string Cast { get; set; }
 
-        public CevioTalkerComponent[] Components { get; set; }
+        public List<CevioTalkerComponent> Components { get; set; } = new List<CevioTalkerComponent>();
 
         public uint Speed { get; set; }
 

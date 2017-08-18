@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using FFXIV.Framework.Common;
 using FFXIV.Framework.TTS.Common;
 using FFXIV.Framework.TTS.Common.Models;
@@ -7,7 +8,8 @@ using NLog;
 namespace FFXIV.Framework.TTS.Server.Models
 {
     public class TTSModel :
-        TTSModelBase
+        MarshalByRefObject,
+        ITTSModel
     {
         #region Logger
 
@@ -16,15 +18,22 @@ namespace FFXIV.Framework.TTS.Server.Models
         #endregion Logger
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public override CevioTalkerModel GetCevioTalker() =>
+        public CevioTalkerModel GetCevioTalker() =>
             CevioModel.Instance.GetCevioTalker();
 
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
+
+        public bool IsReady() => true;
+
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public override void SetCevioTalker(CevioTalkerModel talker) =>
+        public void SetCevioTalker(CevioTalkerModel talker) =>
             CevioModel.Instance.SetCevioTalker(talker);
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public override void TextToWave(
+        public void TextToWave(
             TTSTypes ttsType,
             string textToSpeak,
             string waveFileName,

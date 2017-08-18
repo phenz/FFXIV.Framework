@@ -1,10 +1,9 @@
 ﻿namespace FFXIV.Framework.TTS.Common.Models
 {
-    public interface ITTSModel
+    public interface ITTSModel :
+        IReady
     {
         CevioTalkerModel GetCevioTalker();
-
-        bool IsReady();
 
         void SetCevioTalker(CevioTalkerModel talkerModel);
 

@@ -100,10 +100,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TTSServer.cs" />
-    <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="Views\MainView.xaml.cs">
-      <DependentUpon>MainView.xaml</DependentUpon>
+    <Compile Include="RemoteTTSServer.cs" />
+    <Compile Include="ViewModels\MainSimpleViewModel.cs" />
+    <Compile Include="Views\MainSimpleView.xaml.cs">
+      <DependentUpon>MainSimpleView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -160,7 +160,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\MainView.xaml">
+    <Page Include="Views\MainSimpleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

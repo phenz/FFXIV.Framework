@@ -49,9 +49,12 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="IPCClientBase.cs" />
+    <Compile Include="Models\IAudioModel.cs" />
     <Compile Include="Models\CevioTalkerModel.cs" />
+    <Compile Include="Models\IReady.cs" />
     <Compile Include="Models\ITTSModel.cs" />
-    <Compile Include="Models\TTSModelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -65,8 +68,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="TTSClient.cs" />
-    <Compile Include="TTSServerBase.cs" />
+    <Compile Include="RemoteTTSClient.cs" />
+    <Compile Include="IPCServerBase.cs" />
     <Compile Include="TTSTypes.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -53,6 +53,9 @@ namespace FFXIV.Framework.TTS.Server.Models
             if (this.cevioTalker == null)
             {
                 this.cevioTalker = new Talker();
+
+                // 最初に何か有効なキャストを設定する必要がある
+                this.cevioTalker.Cast = Talker.AvailableCasts.FirstOrDefault();
             }
         }
 
@@ -60,32 +63,40 @@ namespace FFXIV.Framework.TTS.Server.Models
 
         public CevioTalkerModel GetCevioTalker()
         {
+            var talkerModel = new CevioTalkerModel();
+
             this.StartCevio();
 
             if (this.cevioTalker == null)
             {
-                return null;
+                return talkerModel;
             }
 
-            var talkerModel = new CevioTalkerModel()
-            {
-                Volume = this.cevioTalker.Volume,
-                Speed = this.cevioTalker.Speed,
-                Tone = this.cevioTalker.Tone,
-                Alpha = this.cevioTalker.Alpha,
-                ToneScale = this.cevioTalker.ToneScale,
-                Cast = this.cevioTalker.Cast,
-                AvailableCasts = Talker.AvailableCasts,
+            // キャストを最初に取得する
+            talkerModel.Cast = this.cevioTalker.Cast;
 
-                Components = (
-                    from x in this.cevioTalker.Components
-                    select new CevioTalkerModel.CevioTalkerComponent()
+            talkerModel.Volume = this.cevioTalker.Volume;
+            talkerModel.Speed = this.cevioTalker.Speed;
+            talkerModel.Tone = this.cevioTalker.Tone;
+            talkerModel.Alpha = this.cevioTalker.Alpha;
+            talkerModel.ToneScale = this.cevioTalker.ToneScale;
+            talkerModel.AvailableCasts = Talker.AvailableCasts;
+
+            if (this.cevioTalker.Components != null)
+            {
+                // Components にはインデックスでしかアクセスできない
+                for (int i = 0; i < this.cevioTalker.Components.Length; i++)
+                {
+                    var component = new CevioTalkerModel.CevioTalkerComponent()
                     {
-                        Id = x.Id,
-                        Name = x.Name,
-                        Value = x.Value,
-                    }).ToArray(),
-            };
+                        Id = this.cevioTalker.Components[i].Id,
+                        Name = this.cevioTalker.Components[i].Name,
+                        Value = this.cevioTalker.Components[i].Value,
+                    };
+
+                    talkerModel.Components.Add(component);
+                }
+            }
 
             return talkerModel;
         }
@@ -100,19 +111,32 @@ namespace FFXIV.Framework.TTS.Server.Models
                 return;
             }
 
+            if (string.IsNullOrEmpty(talkerModel.Cast) ||
+                !Talker.AvailableCasts.Contains(talkerModel.Cast))
+            {
+                return;
+            }
+
+            // キャストを最初に指定する
+            this.cevioTalker.Cast = talkerModel.Cast;
+
             this.cevioTalker.Volume = talkerModel.Volume;
             this.cevioTalker.Speed = talkerModel.Speed;
             this.cevioTalker.Tone = talkerModel.Tone;
             this.cevioTalker.Alpha = talkerModel.Alpha;
             this.cevioTalker.ToneScale = talkerModel.ToneScale;
-            this.cevioTalker.Cast = talkerModel.Cast;
 
-            foreach (var com in this.cevioTalker.Components)
+            if (this.cevioTalker.Components != null)
             {
-                var src = talkerModel.Components.FirstOrDefault(x => x.Id == com.Id);
-                if (src != null)
+                // Components にはインデックスでしかアクセスできない
+                for (int i = 0; i < this.cevioTalker.Components.Length; i++)
                 {
-                    com.Value = src.Value;
+                    var component = this.cevioTalker.Components[i];
+                    var src = talkerModel.Components.FirstOrDefault(x => x.Id == component.Id);
+                    if (src != null)
+                    {
+                        component.Value = src.Value;
+                    }
                 }
             }
         }

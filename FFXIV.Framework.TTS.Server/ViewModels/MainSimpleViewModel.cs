@@ -9,7 +9,7 @@ using Prism.Mvvm;
 
 namespace FFXIV.Framework.TTS.Server.ViewModels
 {
-    public class MainViewModel :
+    public class MainSimpleViewModel :
         BindableBase
     {
         #region View
@@ -23,7 +23,7 @@ namespace FFXIV.Framework.TTS.Server.ViewModels
         private DelegateCommand refreshIPCChannelCommand;
         private DelegateCommand startCevioCommand;
 
-        public MainViewModel()
+        public MainSimpleViewModel()
         {
             AppLog.AppendedLog += (s, e) =>
             {
@@ -44,8 +44,8 @@ namespace FFXIV.Framework.TTS.Server.ViewModels
 
         public ICommand RefreshIPCChannelCommand => (this.refreshIPCChannelCommand ?? (this.refreshIPCChannelCommand = new DelegateCommand(async () =>
         {
-            TTSServer.Instance.Close();
-            TTSServer.Instance.Open();
+            RemoteTTSServer.Instance.Close();
+            RemoteTTSServer.Instance.Open();
 
             await this.View.ShowMessageDialogAync(
                 "Refresh IPC Channel",
