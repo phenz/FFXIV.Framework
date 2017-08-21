@@ -17,6 +17,12 @@ namespace FFXIV.Framework.Dialog.Views
             set => ColorDialog.content.Color = value;
         }
 
+        public static bool IgnoreAlpha
+        {
+            get => ColorDialog.content.IgnoreAlpha;
+            set => ColorDialog.content.IgnoreAlpha = value;
+        }
+
         public static bool? ShowDialog()
         {
             var dialog = new ModernDialog

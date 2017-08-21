@@ -21,6 +21,9 @@ namespace FFXIV.Framework.Dialog
         [DataMember(Order = 3)]
         public Color Color { get; set; }
 
+        [DataMember(Order = 4)]
+        public bool IgnoreAlpha { get; set; }
+
         public System.Drawing.Color LegacyColor => this.Color.ToLegacy();
 
         public static ColorDialogResult FromString(

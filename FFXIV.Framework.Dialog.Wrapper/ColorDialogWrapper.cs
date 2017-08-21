@@ -14,14 +14,16 @@ namespace FFXIV.Framework.Dialog
             @"FFXIV.Framework.Dialog.exe");
 
         public static ColorDialogResult ShowDialog(
-            System.Drawing.Color? color = null)
+            System.Drawing.Color? color = null,
+            bool ignoreAlpha = false)
         {
             var wpfColor = color?.ToWPF();
-            return ColorDialogWrapper.ShowDialog(wpfColor);
+            return ColorDialogWrapper.ShowDialog(wpfColor, ignoreAlpha);
         }
 
         public static ColorDialogResult ShowDialog(
-            Color? color = null)
+            Color? color = null,
+            bool ignoreAlpha = false)
         {
             var pi = new ProcessStartInfo(WPFDialogProccess);
             pi.UseShellExecute = false;
@@ -30,6 +32,7 @@ namespace FFXIV.Framework.Dialog
             var result = new ColorDialogResult()
             {
                 Color = color.HasValue ? color.Value : Colors.Transparent,
+                IgnoreAlpha = ignoreAlpha,
             };
 
             pi.Arguments = result.ToString().EscapeDoubleQuotes();
@@ -67,20 +70,22 @@ namespace FFXIV.Framework.Dialog
         }
 
         public static Task<ColorDialogResult> ShowDialogAsync(
-            System.Drawing.Color? color = null)
+            System.Drawing.Color? color = null,
+            bool ignoreAlpha = false)
         {
             return Task.Run(() =>
             {
-                return ColorDialogWrapper.ShowDialog(color);
+                return ColorDialogWrapper.ShowDialog(color, ignoreAlpha);
             });
         }
 
         public static Task<ColorDialogResult> ShowDialogAsync(
-            Color? color = null)
+            Color? color = null,
+            bool ignoreAlpha = false)
         {
             return Task.Run(() =>
             {
-                return ColorDialogWrapper.ShowDialog(color);
+                return ColorDialogWrapper.ShowDialog(color, ignoreAlpha);
             });
         }
     }

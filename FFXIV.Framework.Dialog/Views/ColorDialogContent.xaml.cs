@@ -33,13 +33,36 @@ namespace FFXIV.Framework.Dialog.Views
                 this.RTextBox.Text = color.R.ToString();
                 this.GTextBox.Text = color.G.ToString();
                 this.BTextBox.Text = color.B.ToString();
-                this.ATextBox.Text = color.A.ToString();
+                this.ATextBox.Text = !this.IgnoreAlpha ?
+                    color.A.ToString() :
+                    "255";
 
                 this.ToPreview();
             };
         }
 
         public Color Color { get; set; }
+
+        private bool ignoreAlpha;
+
+        public bool IgnoreAlpha
+        {
+            get => this.ignoreAlpha;
+            set
+            {
+                if (this.ignoreAlpha != value)
+                {
+                    this.ignoreAlpha = value;
+                    this.ASlider.IsEnabled = !this.ignoreAlpha;
+                    this.ATextBox.IsReadOnly = !this.ignoreAlpha;
+
+                    if (this.ignoreAlpha)
+                    {
+                        this.ATextBox.Text = "255";
+                    }
+                }
+            }
+        }
 
         public void Apply()
         {
@@ -81,7 +104,9 @@ namespace FFXIV.Framework.Dialog.Views
                 this.RTextBox.Text = this.Color.R.ToString();
                 this.GTextBox.Text = this.Color.G.ToString();
                 this.BTextBox.Text = this.Color.B.ToString();
-                this.ATextBox.Text = this.Color.A.ToString();
+                this.ATextBox.Text = !this.IgnoreAlpha ?
+                    this.Color.A.ToString() :
+                    "255";
             }
         }
 
@@ -94,7 +119,9 @@ namespace FFXIV.Framework.Dialog.Views
                 this.RTextBox.Text = color.R.ToString();
                 this.GTextBox.Text = color.G.ToString();
                 this.BTextBox.Text = color.B.ToString();
-                this.ATextBox.Text = color.A.ToString();
+                this.ATextBox.Text = !this.IgnoreAlpha ?
+                    color.A.ToString() :
+                    "255";
             }
         }
 

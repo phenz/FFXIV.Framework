@@ -98,6 +98,7 @@ namespace FFXIV.Framework.Dialog
                 {
                     result = ColorDialogResult.FromString(arguments);
                     ColorDialog.Color = result.Color;
+                    ColorDialog.IgnoreAlpha = result.IgnoreAlpha;
                 }
 
                 result.Result = ColorDialog.ShowDialog() ?? false;
