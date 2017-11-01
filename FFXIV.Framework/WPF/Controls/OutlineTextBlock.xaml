@@ -1,0 +1,98 @@
+<UserControl
+  x:Class="FFXIV.Framework.WPF.Controls.OutlineTextBlock"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:cnv="clr-namespace:FFXIV.Framework.WPF.Converters"
+  xmlns:local="clr-namespace:FFXIV.Framework.WPF.Controls"
+  mc:Ignorable="d"
+  Foreground="White"
+  FontWeight="Black"
+  FontSize="12">
+
+  <UserControl.Resources>
+    <cnv:ColorOpacityConverter x:Key="ColorOpacityConverter" />
+  </UserControl.Resources>
+
+  <Grid>
+    <Grid.LayoutTransform>
+      <ScaleTransform
+        x:Name="ScaleTransform"
+        ScaleX="3"
+        ScaleY="{Binding RelativeSource={RelativeSource Self}, Path=ScaleX, Mode=OneWay}" />
+    </Grid.LayoutTransform>
+
+    <Border x:Name="BluerBorder">
+      <Border.Effect>
+        <DropShadowEffect
+          x:Name="BluerEffect"
+          RenderingBias="Performance"
+          BlurRadius="4"
+          Direction="0"
+          ShadowDepth="0"
+          Opacity="0.8"
+          Color="{Binding ElementName=TextEffect, Path=Color, Mode=OneWay}" />
+      </Border.Effect>
+
+      <Grid>
+        <TextBlock
+          x:Name="CoreTextBlock"
+          Text="サンプルテキスト"
+          Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Foreground, Mode=OneWay}">
+
+          <TextBlock.Effect>
+            <DropShadowEffect
+              x:Name="TextEffect"
+              RenderingBias="Performance"
+              BlurRadius="1"
+              Direction="0"
+              ShadowDepth="0"
+              Opacity="0.99"
+              Color="OrangeRed" />
+          </TextBlock.Effect>
+        </TextBlock>
+
+        <TextBlock
+          Text="{Binding ElementName=CoreTextBlock, Path=Text, Mode=OneWay}"
+          Foreground="{Binding ElementName=CoreTextBlock, Path=Foreground, Mode=OneWay, Converter={StaticResource ColorOpacityConverter}, ConverterParameter=0}"
+          FontFamily="{Binding ElementName=CoreTextBlock, Path=FontFamily, Mode=OneWay}"
+          FontSize="{Binding ElementName=CoreTextBlock, Path=FontSize, Mode=OneWay}"
+          FontWeight="{Binding ElementName=CoreTextBlock, Path=FontWeight, Mode=OneWay}"
+          FontStyle="{Binding ElementName=CoreTextBlock, Path=FontStyle, Mode=OneWay}"
+          FontStretch="{Binding ElementName=CoreTextBlock, Path=FontStretch, Mode=OneWay}"
+          Effect="{Binding ElementName=CoreTextBlock, Path=Effect, Mode=OneWay}" />
+
+        <TextBlock
+          Text="{Binding ElementName=CoreTextBlock, Path=Text, Mode=OneWay}"
+          Foreground="{Binding ElementName=CoreTextBlock, Path=Foreground, Mode=OneWay, Converter={StaticResource ColorOpacityConverter}, ConverterParameter=0}"
+          FontFamily="{Binding ElementName=CoreTextBlock, Path=FontFamily, Mode=OneWay}"
+          FontSize="{Binding ElementName=CoreTextBlock, Path=FontSize, Mode=OneWay}"
+          FontWeight="{Binding ElementName=CoreTextBlock, Path=FontWeight, Mode=OneWay}"
+          FontStyle="{Binding ElementName=CoreTextBlock, Path=FontStyle, Mode=OneWay}"
+          FontStretch="{Binding ElementName=CoreTextBlock, Path=FontStretch, Mode=OneWay}"
+          Effect="{Binding ElementName=CoreTextBlock, Path=Effect, Mode=OneWay}" />
+
+        <TextBlock
+          Text="{Binding ElementName=CoreTextBlock, Path=Text, Mode=OneWay}"
+          Foreground="{Binding ElementName=CoreTextBlock, Path=Foreground, Mode=OneWay, Converter={StaticResource ColorOpacityConverter}, ConverterParameter=0}"
+          FontFamily="{Binding ElementName=CoreTextBlock, Path=FontFamily, Mode=OneWay}"
+          FontSize="{Binding ElementName=CoreTextBlock, Path=FontSize, Mode=OneWay}"
+          FontWeight="{Binding ElementName=CoreTextBlock, Path=FontWeight, Mode=OneWay}"
+          FontStyle="{Binding ElementName=CoreTextBlock, Path=FontStyle, Mode=OneWay}"
+          FontStretch="{Binding ElementName=CoreTextBlock, Path=FontStretch, Mode=OneWay}"
+          Effect="{Binding ElementName=CoreTextBlock, Path=Effect, Mode=OneWay}" />
+
+        <TextBlock
+          Text="{Binding ElementName=CoreTextBlock, Path=Text, Mode=OneWay}"
+          Foreground="{Binding ElementName=CoreTextBlock, Path=Foreground, Mode=OneWay, Converter={StaticResource ColorOpacityConverter}, ConverterParameter=0}"
+          FontFamily="{Binding ElementName=CoreTextBlock, Path=FontFamily, Mode=OneWay}"
+          FontSize="{Binding ElementName=CoreTextBlock, Path=FontSize, Mode=OneWay}"
+          FontWeight="{Binding ElementName=CoreTextBlock, Path=FontWeight, Mode=OneWay}"
+          FontStyle="{Binding ElementName=CoreTextBlock, Path=FontStyle, Mode=OneWay}"
+          FontStretch="{Binding ElementName=CoreTextBlock, Path=FontStretch, Mode=OneWay}"
+          Effect="{Binding ElementName=CoreTextBlock, Path=Effect, Mode=OneWay}" />
+      </Grid>
+    </Border>
+  </Grid>
+</UserControl>
