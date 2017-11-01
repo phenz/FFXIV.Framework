@@ -7,9 +7,9 @@ namespace FFXIV.Framework.WPF.Controls
     /// <summary>
     /// OutlineTextBlock.xaml の相互作用ロジック
     /// </summary>
-    public partial class OutlineTextBlock : UserControl
+    public partial class LightOutlineTextBlock : UserControl
     {
-        public OutlineTextBlock()
+        public LightOutlineTextBlock()
         {
             this.InitializeComponent();
         }
@@ -23,10 +23,10 @@ namespace FFXIV.Framework.WPF.Controls
             = DependencyProperty.Register(
             nameof(Text),
             typeof(string),
-            typeof(OutlineTextBlock),
+            typeof(LightOutlineTextBlock),
             new PropertyMetadata(
                 "サンプルテキスト",
-                (s, e) => (s as OutlineTextBlock)?.Render()));
+                (s, e) => (s as LightOutlineTextBlock)?.Render()));
 
         /// <summary>
         /// Text
@@ -48,10 +48,10 @@ namespace FFXIV.Framework.WPF.Controls
             = DependencyProperty.Register(
             nameof(Stroke),
             typeof(Color),
-            typeof(OutlineTextBlock),
+            typeof(LightOutlineTextBlock),
             new PropertyMetadata(
                 Colors.OrangeRed,
-                (s, e) => (s as OutlineTextBlock)?.Render()));
+                (s, e) => (s as LightOutlineTextBlock)?.Render()));
 
         /// <summary>
         /// Stroke
@@ -64,33 +64,6 @@ namespace FFXIV.Framework.WPF.Controls
 
         #endregion Stroke 依存関係プロパティ
 
-        #region Size 依存関係プロパティ
-
-        private const double DefaultSize = 12;
-
-        /// <summary>
-        /// Size 依存関係プロパティ
-        /// </summary>
-        public static readonly DependencyProperty SizeProperty
-            = DependencyProperty.Register(
-            nameof(Size),
-            typeof(double),
-            typeof(OutlineTextBlock),
-            new PropertyMetadata(
-                DefaultSize,
-                (s, e) => (s as OutlineTextBlock)?.Render()));
-
-        /// <summary>
-        /// Size
-        /// </summary>
-        public double Size
-        {
-            get => (double)this.GetValue(SizeProperty);
-            set => this.SetValue(SizeProperty, value);
-        }
-
-        #endregion Size 依存関係プロパティ
-
         /// <summary>
         /// 描画する
         /// </summary>
@@ -98,7 +71,6 @@ namespace FFXIV.Framework.WPF.Controls
         {
             this.CoreTextBlock.Text = this.Text;
             this.TextEffect.Color = this.Stroke;
-            this.ScaleTransform.ScaleX = this.Size / DefaultSize;
         }
     }
 }

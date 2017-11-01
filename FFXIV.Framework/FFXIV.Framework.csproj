@@ -99,9 +99,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="WPF\Controls\Arc.xaml.cs">
+      <DependentUpon>Arc.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF\Converters\ColorOpacityConverter.cs" />
-    <Compile Include="WPF\Controls\OutlineTextBlock.xaml.cs">
-      <DependentUpon>OutlineTextBlock.xaml</DependentUpon>
+    <Compile Include="WPF\Controls\LightOutlineTextBlock.xaml.cs">
+      <DependentUpon>LightOutlineTextBlock.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -114,7 +117,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="WPF\Controls\OutlineTextBlock.xaml">
+    <Page Include="WPF\Controls\Arc.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\Controls\LightOutlineTextBlock.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
