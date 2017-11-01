@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.CompilerServices;
 using FFXIV.Framework.Common;
 using FFXIV.Framework.TTS.Common;
@@ -37,16 +37,16 @@ namespace FFXIV.Framework.TTS.Server.Models
             TTSTypes ttsType,
             string textToSpeak,
             string waveFileName,
-            int speed)
+            int speed,
+            float gain)
         {
             switch (ttsType)
             {
-                case TTSTypes.Yukkuri:
-                    YukkuriModel.Instance.TextToWave(textToSpeak, waveFileName, speed);
-                    break;
-
                 case TTSTypes.CeVIO:
-                    CevioModel.Instance.TextToWave(textToSpeak, waveFileName);
+                    CevioModel.Instance.TextToWave(
+                        textToSpeak,
+                        waveFileName,
+                        gain);
                     break;
             }
 

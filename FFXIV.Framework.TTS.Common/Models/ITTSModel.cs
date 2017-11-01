@@ -1,4 +1,4 @@
-﻿namespace FFXIV.Framework.TTS.Common.Models
+namespace FFXIV.Framework.TTS.Common.Models
 {
     public interface ITTSModel :
         IReady
@@ -11,6 +11,7 @@
             TTSTypes ttsType,
             string textToSpeak,
             string waveFileName,
-            int speed);
+            int speed,
+            float gain);
     }
 }

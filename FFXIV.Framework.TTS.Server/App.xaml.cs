@@ -1,9 +1,11 @@
-﻿using System;
+using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Threading;
 using FFXIV.Framework.Common;
+using FFXIV.Framework.TTS.Server.Config;
 using NLog;
 
 namespace FFXIV.Framework.TTS.Server
@@ -29,6 +31,11 @@ namespace FFXIV.Framework.TTS.Server
         #endregion Logger
 
         private TaskTrayComponent taskTrayComponet = new TaskTrayComponent();
+
+        private DispatcherTimer shutdownTimer = new DispatcherTimer(DispatcherPriority.Background)
+        {
+            Interval = TimeSpan.FromSeconds(10),
+        };
 
         public App()
         {
@@ -97,6 +104,9 @@ namespace FFXIV.Framework.TTS.Server
                     this.taskTrayComponet.Dispose();
                     this.taskTrayComponet = null;
                 }
+
+                // 設定ファイルを保存する
+                Settings.Instance.Save();
             }
             catch (Exception ex)
             {
@@ -120,11 +130,19 @@ namespace FFXIV.Framework.TTS.Server
             {
                 this.logger.Trace("begin.");
 
+                // 設定ファイルを読み込む
+                Settings.Instance.Load();
+
                 // バージョンを出力する
                 this.logger.Info($"{EnvironmentHelper.GetProductName()} {EnvironmentHelper.GetVersion().ToStringShort()}");
 
                 // サーバを開始する
                 RemoteTTSServer.Instance.Open();
+
+                // シャットダウンタイマーをセットする
+                this.shutdownTimer.Tick -= this.ShutdownTimerOnTick;
+                this.shutdownTimer.Tick += this.ShutdownTimerOnTick;
+                this.shutdownTimer.Start();
             }
             catch (Exception ex)
             {
@@ -135,6 +153,18 @@ namespace FFXIV.Framework.TTS.Server
             finally
             {
                 this.logger.Trace("end.");
+            }
+        }
+
+        private void ShutdownTimerOnTick(object sender, EventArgs e)
+        {
+            if (Process.GetProcessesByName("Advanced Combat Tracker").Length < 1 &&
+                Process.GetProcessesByName("ACTx86").Length < 1)
+            {
+                this.logger.Trace("ACT not found. shutdown server.");
+
+                this.shutdownTimer.Stop();
+                this.Shutdown();
             }
         }
     }
