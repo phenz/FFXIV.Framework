@@ -223,15 +223,15 @@ namespace FFXIV.Framework.WPF.Controls
 
             // バーの幅を算出する
             var width = !this.IsReverse ?
-                this.Width * this.Progress :
-                this.Width * (1.0 - this.Progress);
+                this.ActualWidth * this.Progress :
+                this.ActualWidth * (1.0 - this.Progress);
 
             // バーの幅を設定する
             this.ForeBar.Width = width;
 
             // 枠の幅を決める
             this.StrokeBar.Width = this.IsStrokeBackground ?
-                this.Width :
+                this.ActualWidth :
                 width;
         }
     }
