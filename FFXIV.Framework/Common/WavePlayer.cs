@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 using NAudio.CoreAudioApi;
 using NAudio.Wave;
 
@@ -155,19 +154,21 @@ namespace FFXIV.Framework.Common
             return list;
         }
 
-        public Task PlayAsync(string file, float volume = 1.0f) =>
-            Task.Run(() => this.Play(file, volume));
-
         public void Play(
             string file,
-            float volume = 1.0f)
+            float volume = 1.0f,
+            WavePlayerTypes playerType = WavePlayerTypes.WASAPI,
+            string deviceID = null)
         {
             if (!File.Exists(file))
             {
                 return;
             }
 
-            YukkuriPlayer.GetPlayer(file)?.Play(volume);
+            YukkuriPlayer.GetPlayer(
+                file,
+                playerType,
+                deviceID)?.Play(volume);
         }
     }
 
