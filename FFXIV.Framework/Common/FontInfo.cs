@@ -129,8 +129,10 @@ namespace FFXIV.Framework.Common
             get => this.size;
             set
             {
-                this.SetProperty(ref this.size, value);
-                this.RaisePropertyChanged(nameof(this.OutlineThickness));
+                if (this.SetProperty(ref this.size, value))
+                {
+                    this.RaisePropertyChanged(nameof(this.OutlineThickness));
+                }
             }
         }
 
@@ -183,8 +185,10 @@ namespace FFXIV.Framework.Common
             get => this.weight;
             set
             {
-                this.SetProperty(ref this.weight, value);
-                this.RaisePropertyChanged(nameof(this.OutlineThickness));
+                if (this.SetProperty(ref this.weight, value))
+                {
+                    this.RaisePropertyChanged(nameof(this.OutlineThickness));
+                }
             }
         }
 

@@ -207,5 +207,14 @@ namespace FFXIV.Framework.Extensions
                 (byte)g,
                 (byte)b);
         }
+
+        /// <summary>
+        /// ブラシに変換する
+        /// </summary>
+        /// <param name="color">Color</param>
+        /// <returns>Color</returns>
+        public static System.Windows.Media.SolidColorBrush ToBrush(
+            this System.Windows.Media.Color color)
+            => new System.Windows.Media.SolidColorBrush(color);
     }
 }
