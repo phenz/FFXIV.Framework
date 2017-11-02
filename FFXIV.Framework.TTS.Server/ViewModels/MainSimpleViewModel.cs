@@ -44,23 +44,23 @@ namespace FFXIV.Framework.TTS.Server.ViewModels
 
         public string Messages => AppLog.Log.ToString();
 
-        public ICommand RefreshIPCChannelCommand => (this.refreshIPCChannelCommand ?? (this.refreshIPCChannelCommand = new DelegateCommand(async () =>
+        public ICommand RefreshIPCChannelCommand => (this.refreshIPCChannelCommand ?? (this.refreshIPCChannelCommand = new DelegateCommand(() =>
         {
             RemoteTTSServer.Instance.Close();
             RemoteTTSServer.Instance.Open();
 
-            await this.View.ShowMessageDialogAync(
+            this.View.ShowMessage(
                 "Refresh IPC Channel",
                 "Done.");
         })));
 
-        public ICommand StartCevioCommand => (this.startCevioCommand ?? (this.startCevioCommand = new DelegateCommand(async () =>
+        public ICommand StartCevioCommand => (this.startCevioCommand ?? (this.startCevioCommand = new DelegateCommand(() =>
         {
             try
             {
                 CevioModel.Instance.StartCevio();
 
-                await this.View.ShowMessageDialogAync(
+                this.View.ShowMessage(
                     "Start CeVIO Creative Studio",
                     "Done.");
             }
@@ -71,7 +71,7 @@ namespace FFXIV.Framework.TTS.Server.ViewModels
                 sb.AppendLine();
                 sb.AppendLine(ex.ToString());
 
-                await this.View.ShowMessageDialogAync(
+                this.View.ShowMessage(
                     "Start CeVIO Creative Studio",
                     sb.ToString());
             }

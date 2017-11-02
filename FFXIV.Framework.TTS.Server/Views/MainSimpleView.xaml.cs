@@ -1,10 +1,7 @@
 using System;
-using System.Threading.Tasks;
 using System.Windows;
 using FFXIV.Framework.Common;
 using FFXIV.Framework.TTS.Server.ViewModels;
-using MahApps.Metro.Controls;
-using MahApps.Metro.Controls.Dialogs;
 using NLog;
 
 namespace FFXIV.Framework.TTS.Server.Views
@@ -13,7 +10,7 @@ namespace FFXIV.Framework.TTS.Server.Views
     /// MainView.xaml の相互作用ロジック
     /// </summary>
     public partial class MainView :
-        MetroWindow
+        Window
     {
         #region Singleton
 
@@ -38,15 +35,14 @@ namespace FFXIV.Framework.TTS.Server.Views
 
         public MainSimpleViewModel ViewModel => (MainSimpleViewModel)this.DataContext;
 
-        public Task<MessageDialogResult> ShowMessageDialogAync(
+        public void ShowMessage(
             string title,
-            string message,
-            MessageDialogStyle style = MessageDialogStyle.Affirmative)
+            string message)
         {
-            return this.ShowMessageAsync(
-                title,
+            MessageBox.Show(
                 message,
-                style);
+                title,
+                MessageBoxButton.OK);
         }
 
         #region Window state

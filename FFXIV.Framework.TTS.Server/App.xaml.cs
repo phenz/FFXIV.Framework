@@ -34,7 +34,7 @@ namespace FFXIV.Framework.TTS.Server
 
         private DispatcherTimer shutdownTimer = new DispatcherTimer(DispatcherPriority.Background)
         {
-            Interval = TimeSpan.FromSeconds(10),
+            Interval = TimeSpan.FromSeconds(60),
         };
 
         public App()
@@ -163,8 +163,10 @@ namespace FFXIV.Framework.TTS.Server
             {
                 this.logger.Trace("ACT not found. shutdown server.");
 
+#if !DEBUG
                 this.shutdownTimer.Stop();
                 this.Shutdown();
+#endif
             }
         }
     }
