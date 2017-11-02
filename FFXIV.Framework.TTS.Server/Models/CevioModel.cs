@@ -19,7 +19,7 @@ namespace FFXIV.Framework.TTS.Server.Models
 
         #region Logger
 
-        private Logger logger = AppLog.DefaultLogger;
+        private Logger Logger => AppLog.DefaultLogger;
 
         #endregion Logger
 
@@ -32,7 +32,7 @@ namespace FFXIV.Framework.TTS.Server.Models
             if (ServiceControl.IsHostStarted)
             {
                 ServiceControl.CloseHost(HostCloseMode.Interrupt);
-                this.logger.Info($"CeVIO Remote Service, CloseHost.");
+                this.Logger.Info($"CeVIO Remote Service, CloseHost.");
             }
 
             if (this.cevioTalker != null)
@@ -46,7 +46,7 @@ namespace FFXIV.Framework.TTS.Server.Models
             if (!ServiceControl.IsHostStarted)
             {
                 ServiceControl.StartHost(false);
-                this.logger.Info($"CeVIO Remote Service, StartHost.");
+                this.Logger.Info($"CeVIO Remote Service, StartHost.");
             }
 
             if (this.cevioTalker == null)

@@ -19,7 +19,7 @@ namespace FFXIV.Framework.TTS.Server
 
         #region Logger
 
-        private Logger logger = AppLog.DefaultLogger;
+        private Logger Logger => AppLog.DefaultLogger;
 
         #endregion Logger
 
@@ -30,7 +30,7 @@ namespace FFXIV.Framework.TTS.Server
         {
             this.UnregisterChannel();
 
-            this.logger.Info($"IPC Channel Closed.");
+            this.Logger.Info($"IPC Channel Closed.");
         }
 
         public void Open()
@@ -44,7 +44,7 @@ namespace FFXIV.Framework.TTS.Server
             var uri = $"{chan.GetChannelUri()}/{Constants.RemoteTTSObjectName}";
             MainView.Instance.ViewModel.IPCChannelUri = uri;
 
-            this.logger.Info($"IPC Channel Listened. Uri={uri}");
+            this.Logger.Info($"IPC Channel Listened. Uri={uri}");
         }
     }
 }

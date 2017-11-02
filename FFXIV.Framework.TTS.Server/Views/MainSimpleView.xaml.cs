@@ -22,7 +22,7 @@ namespace FFXIV.Framework.TTS.Server.Views
 
         #region Logger
 
-        private Logger logger = AppLog.DefaultLogger;
+        private Logger Logger => AppLog.DefaultLogger;
 
         #endregion Logger
 

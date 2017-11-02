@@ -1,11 +1,12 @@
 using System;
 using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Threading;
 using FFXIV.Framework.Common;
-using FFXIV.Framework.TTS.Server.Config;
 using NLog;
 
 namespace FFXIV.Framework.TTS.Server
@@ -26,7 +27,7 @@ namespace FFXIV.Framework.TTS.Server
 
         #region Logger
 
-        private Logger logger = AppLog.DefaultLogger;
+        private Logger Logger => AppLog.DefaultLogger;
 
         #endregion Logger
 
@@ -80,8 +81,15 @@ namespace FFXIV.Framework.TTS.Server
             try
             {
                 var message = "Dispatcher Unhandled Exception";
-                this.logger.Fatal(e.Exception, message);
                 ShowMessageBoxException(message, e.Exception);
+
+                try
+                {
+                    this.Logger.Fatal(e.Exception, message);
+                }
+                catch (Exception)
+                {
+                }
             }
             finally
             {
@@ -94,7 +102,7 @@ namespace FFXIV.Framework.TTS.Server
         {
             try
             {
-                this.logger.Trace("begin.");
+                this.Logger.Trace("begin.");
 
                 // サーバを終了する
                 RemoteTTSServer.Instance.Close();
@@ -104,19 +112,16 @@ namespace FFXIV.Framework.TTS.Server
                     this.taskTrayComponet.Dispose();
                     this.taskTrayComponet = null;
                 }
-
-                // 設定ファイルを保存する
-                Settings.Instance.Save();
             }
             catch (Exception ex)
             {
                 var message = "App exit error";
-                this.logger.Fatal(ex, message);
+                this.Logger.Fatal(ex, message);
                 ShowMessageBoxException(message, ex);
             }
             finally
             {
-                this.logger.Trace("end.");
+                this.Logger.Trace("end.");
             }
         }
 
@@ -124,17 +129,16 @@ namespace FFXIV.Framework.TTS.Server
         private void App_Startup(object sender, StartupEventArgs e)
         {
             // NLogを設定する
-            AppLog.LoadConfiguration("FFXIV.Framework.TTS.Server.NLog.config");
+            AppLog.LoadConfiguration(Path.Combine(
+                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                "FFXIV.Framework.TTS.Server.NLog.config"));
 
             try
             {
-                this.logger.Trace("begin.");
-
-                // 設定ファイルを読み込む
-                Settings.Instance.Load();
+                this.Logger.Trace("begin.");
 
                 // バージョンを出力する
-                this.logger.Info($"{EnvironmentHelper.GetProductName()} {EnvironmentHelper.GetVersion().ToStringShort()}");
+                this.Logger.Info($"{EnvironmentHelper.GetProductName()} {EnvironmentHelper.GetVersion().ToStringShort()}");
 
                 // サーバを開始する
                 RemoteTTSServer.Instance.Open();
@@ -147,12 +151,12 @@ namespace FFXIV.Framework.TTS.Server
             catch (Exception ex)
             {
                 var message = "App initialize error";
-                this.logger.Fatal(ex, message);
+                this.Logger.Fatal(ex, message);
                 ShowMessageBoxException(message, ex);
             }
             finally
             {
-                this.logger.Trace("end.");
+                this.Logger.Trace("end.");
             }
         }
 
@@ -161,7 +165,7 @@ namespace FFXIV.Framework.TTS.Server
             if (Process.GetProcessesByName("Advanced Combat Tracker").Length < 1 &&
                 Process.GetProcessesByName("ACTx86").Length < 1)
             {
-                this.logger.Trace("ACT not found. shutdown server.");
+                this.Logger.Trace("ACT not found. shutdown server.");
 
 #if !DEBUG
                 this.shutdownTimer.Stop();

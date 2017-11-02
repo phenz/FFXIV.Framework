@@ -1,17 +1,16 @@
 using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Input;
 using FFXIV.Framework.Common;
-using FFXIV.Framework.TTS.Server.Config;
 using FFXIV.Framework.TTS.Server.Models;
 using FFXIV.Framework.TTS.Server.Views;
-using Prism.Commands;
-using Prism.Mvvm;
 
 namespace FFXIV.Framework.TTS.Server.ViewModels
 {
     public class MainSimpleViewModel :
-        BindableBase
+        INotifyPropertyChanged
     {
         #region View
 
@@ -19,11 +18,9 @@ namespace FFXIV.Framework.TTS.Server.ViewModels
 
         #endregion View
 
-        public Settings Config => Settings.Instance;
-
         private string ipcChannelUri;
-        private DelegateCommand refreshIPCChannelCommand;
-        private DelegateCommand startCevioCommand;
+        private ICommand refreshIPCChannelCommand;
+        private ICommand startCevioCommand;
 
         public MainSimpleViewModel()
         {
@@ -44,7 +41,7 @@ namespace FFXIV.Framework.TTS.Server.ViewModels
 
         public string Messages => AppLog.Log.ToString();
 
-        public ICommand RefreshIPCChannelCommand => (this.refreshIPCChannelCommand ?? (this.refreshIPCChannelCommand = new DelegateCommand(() =>
+        public ICommand RefreshIPCChannelCommand => (this.refreshIPCChannelCommand ?? (this.refreshIPCChannelCommand = new Command(() =>
         {
             RemoteTTSServer.Instance.Close();
             RemoteTTSServer.Instance.Open();
@@ -54,7 +51,7 @@ namespace FFXIV.Framework.TTS.Server.ViewModels
                 "Done.");
         })));
 
-        public ICommand StartCevioCommand => (this.startCevioCommand ?? (this.startCevioCommand = new DelegateCommand(() =>
+        public ICommand StartCevioCommand => (this.startCevioCommand ?? (this.startCevioCommand = new Command(() =>
         {
             try
             {
@@ -76,5 +73,38 @@ namespace FFXIV.Framework.TTS.Server.ViewModels
                     sb.ToString());
             }
         })));
+
+        #region INotifyPropertyChanged
+
+        [field: NonSerialized]
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void RaisePropertyChanged(
+            [CallerMemberName]string propertyName = null)
+        {
+            this.PropertyChanged?.Invoke(
+                this,
+                new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected virtual bool SetProperty<T>(
+            ref T field,
+            T value,
+            [CallerMemberName]string propertyName = null)
+        {
+            if (Equals(field, value))
+            {
+                return false;
+            }
+
+            field = value;
+            this.PropertyChanged?.Invoke(
+                this,
+                new PropertyChangedEventArgs(propertyName));
+
+            return true;
+        }
+
+        #endregion INotifyPropertyChanged
     }
 }

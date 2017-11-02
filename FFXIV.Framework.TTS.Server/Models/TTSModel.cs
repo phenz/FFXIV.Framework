@@ -13,7 +13,7 @@ namespace FFXIV.Framework.TTS.Server.Models
     {
         #region Logger
 
-        private Logger logger = AppLog.DefaultLogger;
+        private Logger Logger => AppLog.DefaultLogger;
 
         #endregion Logger
 
@@ -50,7 +50,7 @@ namespace FFXIV.Framework.TTS.Server.Models
                     break;
             }
 
-            this.logger.Info($"[{ttsType.ToString()}] Speak {textToSpeak}, wave={waveFileName}");
+            this.Logger.Info($"[{ttsType.ToString()}] Speak {textToSpeak}, wave={waveFileName}");
         }
     }
 }

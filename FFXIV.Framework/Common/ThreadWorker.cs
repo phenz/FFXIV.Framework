@@ -8,7 +8,7 @@ namespace FFXIV.Framework.Common
     {
         #region Logger
 
-        private Logger logger = AppLog.DefaultLogger;
+        private Logger Logger => AppLog.DefaultLogger;
 
         #endregion Logger
 
@@ -72,7 +72,7 @@ namespace FFXIV.Framework.Common
                 this.thread = null;
             }
 
-            this.logger.Trace($"ThreadWorker - {this.Name} end.{(result ? " aborted" : string.Empty)}");
+            this.Logger.Trace($"ThreadWorker - {this.Name} end.{(result ? " aborted" : string.Empty)}");
 
             return result;
         }
@@ -89,7 +89,7 @@ namespace FFXIV.Framework.Common
         private void DoWorkLoop()
         {
             Thread.Sleep((int)this.Interval);
-            this.logger.Trace($"ThreadWorker - {this.Name} start.");
+            this.Logger.Trace($"ThreadWorker - {this.Name} start.");
 
             while (!this.isAbort)
             {
@@ -100,12 +100,12 @@ namespace FFXIV.Framework.Common
                 catch (ThreadAbortException)
                 {
                     this.isAbort = true;
-                    this.logger.Trace($"ThreadWorker - {this.Name} abort.");
+                    this.Logger.Trace($"ThreadWorker - {this.Name} abort.");
                     break;
                 }
                 catch (Exception ex)
                 {
-                    this.logger.Error(ex, $"ThreadWorker - {this.Name} error.");
+                    this.Logger.Error(ex, $"ThreadWorker - {this.Name} error.");
                 }
 
                 if (this.isAbort)
