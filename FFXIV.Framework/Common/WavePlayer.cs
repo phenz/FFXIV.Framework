@@ -165,167 +165,75 @@ namespace FFXIV.Framework.Common
                 return;
             }
 
-            YukkuriPlayer.GetPlayer(
-                file,
-                playerType,
-                deviceID)?.Play(volume);
-        }
-    }
-
-    public class YukkuriPlayer : IDisposable
-    {
-        public YukkuriPlayer(
-            IWavePlayer player,
-            string wave,
-            bool instant = false)
-        {
-            this.InnerPlayer = player;
-            this.AudioStream = new AudioFileReader(wave);
-            this.Instant = instant;
-            this.Init();
-        }
-
-        public void Init()
-        {
-            if (this.InnerPlayer == null ||
-                this.AudioStream == null)
+            var audio = new AudioFileReader(file)
             {
-                return;
-            }
-
-            this.InnerPlayer.PlaybackStopped += (x, y) =>
-            {
-                this.AudioStream.Position = 0;
-
-                if (this.Instant)
-                {
-                    this.InnerPlayer?.Dispose();
-                    this.AudioStream?.Dispose();
-                    this.InnerPlayer = null;
-                    this.AudioStream = null;
-                }
+                Volume = volume
             };
 
-            this.InnerPlayer.Init(this.AudioStream);
-        }
+            var player = this.CreatePlayer(playerType, deviceID);
 
-        public void Play(
-            float volume = 1.0f)
-        {
-            if (this.InnerPlayer == null ||
-                this.AudioStream == null)
+            player.Init(audio);
+            player.PlaybackStopped += (x, y) =>
             {
-                return;
-            }
+                audio.Dispose();
+                player.Dispose();
+                audio = null;
+                player = null;
+            };
 
-            if (this.InnerPlayer.PlaybackState == PlaybackState.Playing)
-            {
-                return;
-            }
-
-            this.AudioStream.Volume = volume;
-            this.InnerPlayer.Play();
-        }
-
-        public void Dispose()
-        {
-            this.InnerPlayer?.Dispose();
-            this.AudioStream?.Dispose();
-            this.InnerPlayer = null;
-            this.AudioStream = null;
-        }
-
-        public bool Instant { get; set; }
-        public IWavePlayer InnerPlayer { get; private set; }
-        public AudioFileReader AudioStream { get; private set; }
-        public bool IsPlaying => this.InnerPlayer?.PlaybackState == PlaybackState.Playing;
-
-        public float Volume
-        {
-            get => this.AudioStream.Volume;
-            set => this.AudioStream.Volume = value;
+            player.Play();
         }
 
         private const int PlayerLatencyWaveOut = 200;
         private const int PlayerLatencyDirectSoundOut = 200;
         private const int PlayerLatencyWasapiOut = 200;
-        private static readonly MMDeviceEnumerator deviceEnumrator = new MMDeviceEnumerator();
-
-        /// <summary>
-        /// 対象のWaveファイルを再生するプレイヤーを取得する
-        /// </summary>
-        /// <param name="wave">WAVEファイル</param>
-        /// <param name="playerType">プレイヤーの種類</param>
-        /// <param name="deviceID">デバイスID</param>
-        /// <returns>
-        /// プレイヤー</returns>
-        public static YukkuriPlayer GetPlayer(
-            string wave,
-            WavePlayerTypes playerType = WavePlayerTypes.WASAPI,
-            string deviceID = null)
-            => CreatePlayer(wave, playerType, deviceID);
 
         /// <summary>
         /// プレイヤーを生成する
         /// </summary>
-        /// <param name="wave">扱うWaveファイル</param>
         /// <param name="playerType">プレイヤーの種類</param>
         /// <param name="deviceID">再生デバイス</param>
         /// <returns>
         /// プレイヤー</returns>
-        public static YukkuriPlayer CreatePlayer(
-            string wave,
+        public IWavePlayer CreatePlayer(
             WavePlayerTypes playerType = WavePlayerTypes.WASAPI,
-            string deviceID = null,
-            bool isInstant = true)
+            string deviceID = null)
         {
-            var player = default(YukkuriPlayer);
+            var player = default(IWavePlayer);
             switch (playerType)
             {
                 case WavePlayerTypes.WaveOut:
-                    player = new YukkuriPlayer(
-                        deviceID == null ?
+                    player = deviceID == null ?
                         new WaveOut() :
                         new WaveOut()
                         {
                             DeviceNumber = int.Parse(deviceID),
                             DesiredLatency = PlayerLatencyWaveOut,
-                        },
-                        wave,
-                        isInstant);
+                        };
                     break;
 
                 case WavePlayerTypes.DirectSound:
-                    player = new YukkuriPlayer(
-                        deviceID == null ?
+                    player = deviceID == null ?
                         new DirectSoundOut() :
                         new DirectSoundOut(
                             Guid.Parse(deviceID),
-                            PlayerLatencyDirectSoundOut),
-                        wave,
-                        isInstant);
+                            PlayerLatencyDirectSoundOut);
                     break;
 
                 case WavePlayerTypes.WASAPI:
-                    player = new YukkuriPlayer(
-                        deviceID == null ?
+                    player = deviceID == null ?
                         new WasapiOut() :
                         new WasapiOut(
                             deviceEnumrator.GetDevice(deviceID),
                             AudioClientShareMode.Shared,
                             false,
-                            PlayerLatencyWasapiOut),
-                        wave,
-                        isInstant);
+                            PlayerLatencyWasapiOut);
                     break;
 
                 case WavePlayerTypes.ASIO:
-                    player = new YukkuriPlayer(
-                        deviceID == null ?
+                    player = deviceID == null ?
                         new AsioOut() :
-                        new AsioOut(deviceID),
-                        wave,
-                        isInstant);
+                        new AsioOut(deviceID);
                     break;
             }
 
