@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using FFXIV.Framework.Extensions;
@@ -14,35 +16,81 @@ namespace FFXIV.Framework.Common
     /// </summary>7
     public static class UpdateChecker
     {
-        private static string GetLastestReleaseUrl(
-            string productName)
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static dynamic GetHojoring()
+        {
+            var obj = default(object);
+
+            try
+            {
+                obj = new ACT.Hojoring.Common.Hojoring();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                obj = null;
+            }
+
+            return obj;
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private static string GetLastestReleaseUrl()
         {
             var url = string.Empty;
 
-            var asm = GetHojoringAssembly();
-            if (asm != null)
+            var hojoring = GetHojoring();
+            if (hojoring != null)
             {
-                dynamic hojoring = asm.CreateInstance("UpdateController");
-                if (hojoring != null)
-                {
-                    url = hojoring.LastestReleaseUrl;
-                }
+                url = hojoring.LastestReleaseUrl;
             }
 
             return url;
         }
 
-        private static Assembly GetHojoringAssembly()
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private static Version GetHojoringVersion()
         {
-            var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var dll = Path.Combine(dir, "ACT.Hojoring.dll");
-            if (File.Exists(dll))
+            var ver = default(Version);
+
+            try
             {
-                return Assembly.LoadFrom(dll);
+                var hojoring = GetHojoring();
+                if (hojoring != null)
+                {
+                    ver = hojoring.Version;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                ver = null;
             }
 
-            return null;
+            return ver;
         }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void ShowSplash()
+        {
+            try
+            {
+                var hojoring = GetHojoring();
+                if (hojoring != null)
+                {
+                    hojoring.ShowSplash();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+        }
+
+        /// <summary>
+        /// チェック済み辞書
+        /// </summary>
+        private static readonly Dictionary<string, bool> checkedDictinary = new Dictionary<string, bool>();
 
         /// <summary>
         /// アップデートを行う
@@ -59,8 +107,8 @@ namespace FFXIV.Framework.Common
             {
                 var html = string.Empty;
 
-                // lastest releaseのURLを置き換える
-                var url = GetLastestReleaseUrl(productName);
+                // HojoringのURLに置き換える？
+                var url = GetLastestReleaseUrl();
                 if (!string.IsNullOrEmpty(url))
                 {
                     lastestReleaseUrl = url;
@@ -99,13 +147,14 @@ namespace FFXIV.Framework.Common
                 }
 
                 // 現在のバージョンを取得する
-                var hojoringAsm = GetHojoringAssembly();
-                if (hojoringAsm != null)
-                {
-                    currentAssembly = hojoringAsm;
-                }
-
                 var currentVersion = currentAssembly.GetName().Version;
+
+                // Hororingのバージョンに置き換える？
+                var hojoringVer = GetHojoringVersion();
+                if (hojoringVer != null)
+                {
+                    currentVersion = hojoringVer;
+                }
 
                 // バージョンを比較する
                 if (!lastestReleaseVersion.ContainsIgnoreCase("FINAL"))
@@ -122,6 +171,16 @@ namespace FFXIV.Framework.Common
                         return r;
                     }
                 }
+
+                // チェック済み？
+                if (checkedDictinary.ContainsKey(lastestReleaseUrl) &&
+                    checkedDictinary[lastestReleaseUrl])
+                {
+                    return r;
+                }
+
+                // このURLはチェック済みにする
+                checkedDictinary[lastestReleaseUrl] = true;
 
                 var prompt = string.Empty;
                 prompt += $"{productName} new version released !" + Environment.NewLine;

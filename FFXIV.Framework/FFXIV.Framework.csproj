@@ -169,6 +169,11 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\ACT.Hojoring.Common\ACT.Hojoring.Common.csproj">
+      <Project>{7e1502b5-db00-4b2e-bdba-19e3379670b3}</Project>
+      <Name>ACT.Hojoring.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
