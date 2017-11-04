@@ -87,22 +87,34 @@ namespace FFXIV.Framework.Common
                 }));
         }
 
+        private static volatile bool loaded;
+
         public static void LoadConfiguration(
             string fileName)
         {
-            if (File.Exists(fileName))
+            lock (locker)
             {
-                LogManager.Configuration = new XmlLoggingConfiguration(fileName, true);
-                return;
-            }
-
-            var dir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            if (!string.IsNullOrEmpty(fileName))
-            {
-                var file = Path.Combine(dir, Path.GetFileName(fileName));
-                if (File.Exists(file))
+                if (loaded)
                 {
-                    LogManager.Configuration = new XmlLoggingConfiguration(file, true);
+                    return;
+                }
+
+                if (File.Exists(fileName))
+                {
+                    LogManager.Configuration = new XmlLoggingConfiguration(fileName, true);
+                    loaded = true;
+                    return;
+                }
+
+                var dir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+                if (!string.IsNullOrEmpty(fileName))
+                {
+                    var file = Path.Combine(dir, Path.GetFileName(fileName));
+                    if (File.Exists(file))
+                    {
+                        LogManager.Configuration = new XmlLoggingConfiguration(file, true);
+                        loaded = true;
+                    }
                 }
             }
         }
