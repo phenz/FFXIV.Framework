@@ -12,11 +12,14 @@ namespace FFXIV.Framework.Common
 {
     public static class AppLog
     {
+        private const int LogBufferSize = 1024;
+        private const int LogBufferMargin = 16;
         public const string ChatLoggerName = "ChatLogger";
         public const string DefaultLoggerName = "DefaultLogger";
+        public const string HojoringConfig = "ACT.Hojoring.NLog.config";
 
         public static readonly object locker = new object();
-        public static readonly List<AppLogEntry> logBuffer = new List<AppLogEntry>();
+        public static readonly List<AppLogEntry> logBuffer = new List<AppLogEntry>(LogBufferSize + LogBufferMargin);
 
         public delegate void AppendedLogEventHandler(object sender, AppendedLogEventArgs e);
 
@@ -51,9 +54,17 @@ namespace FFXIV.Framework.Common
             }
         }
 
+        /// <summary>
+        /// NLogから呼ばれるUI向けログ出力
+        /// </summary>
+        /// <param name="dateTime">日付</param>
+        /// <param name="level">ログレベル</param>
+        /// <param name="callsite">callsite</param>
+        /// <param name="message">メッセージ</param>
         public static void AppendLog(
             string dateTime,
             string level,
+            string callsite,
             string message)
         {
             DateTime d;
@@ -63,11 +74,17 @@ namespace FFXIV.Framework.Common
             {
                 DateTime = d,
                 Level = level,
+                CallSite = callsite,
                 Message = message,
             };
 
             lock (AppLog.locker)
             {
+                if (AppLog.logBuffer.Count > LogBufferSize)
+                {
+                    AppLog.logBuffer.RemoveRange(0, LogBufferMargin);
+                }
+
                 AppLog.logBuffer.Add(entry);
             }
 
@@ -87,7 +104,7 @@ namespace FFXIV.Framework.Common
                 }));
         }
 
-        private static volatile bool loaded;
+        private static bool loaded;
 
         public static void LoadConfiguration(
             string fileName)
