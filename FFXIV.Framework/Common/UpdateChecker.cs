@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using FFXIV.Framework.Extensions;
 
 namespace FFXIV.Framework.Common
 {
     /// <summary>
     /// Update Checker
-    /// </summary>
+    /// </summary>7
     public static class UpdateChecker
     {
         private static string GetLastestReleaseUrl(
@@ -19,21 +19,29 @@ namespace FFXIV.Framework.Common
         {
             var url = string.Empty;
 
-            var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var file = Path.Combine(dir, "ACT.Hojoring.DownloadUrls.txt");
-            if (File.Exists(file))
+            var asm = GetHojoringAssembly();
+            if (asm != null)
             {
-                var lines = File.ReadAllLines(file);
-                foreach (var line in lines)
+                dynamic hojoring = asm.CreateInstance("UpdateController");
+                if (hojoring != null)
                 {
-                    if (line.Contains(productName))
-                    {
-                        url = line.Split(' ').LastOrDefault();
-                    }
+                    url = hojoring.LastestReleaseUrl;
                 }
             }
 
             return url;
+        }
+
+        private static Assembly GetHojoringAssembly()
+        {
+            var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var dll = Path.Combine(dir, "ACT.Hojoring.dll");
+            if (File.Exists(dll))
+            {
+                return Assembly.LoadFrom(dll);
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -42,7 +50,8 @@ namespace FFXIV.Framework.Common
         /// <returns>メッセージ</returns>
         public static string Update(
             string productName,
-            string lastestReleaseUrl)
+            string lastestReleaseUrl,
+            Assembly currentAssembly)
         {
             var r = string.Empty;
 
@@ -89,19 +98,29 @@ namespace FFXIV.Framework.Common
                     return r;
                 }
 
-                var values = lastestReleaseVersion.Replace("v", string.Empty).Split('.');
-                var remoteVersion = new Version(
-                    values.Length > 0 ? int.Parse(values[0]) : 0,
-                    values.Length > 1 ? int.Parse(values[1]) : 0,
-                    0,
-                    values.Length > 2 ? int.Parse(values[2]) : 0);
-
                 // 現在のバージョンを取得する
-                var currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
-
-                if (remoteVersion <= currentVersion)
+                var hojoringAsm = GetHojoringAssembly();
+                if (hojoringAsm != null)
                 {
-                    return r;
+                    currentAssembly = hojoringAsm;
+                }
+
+                var currentVersion = currentAssembly.GetName().Version;
+
+                // バージョンを比較する
+                if (!lastestReleaseVersion.ContainsIgnoreCase("FINAL"))
+                {
+                    var values = lastestReleaseVersion.Replace("v", string.Empty).Split('.');
+                    var remoteVersion = new Version(
+                        values.Length > 0 ? int.Parse(values[0]) : 0,
+                        values.Length > 1 ? int.Parse(values[1]) : 0,
+                        0,
+                        values.Length > 2 ? int.Parse(values[2]) : 0);
+
+                    if (remoteVersion <= currentVersion)
+                    {
+                        return r;
+                    }
                 }
 
                 var prompt = string.Empty;
