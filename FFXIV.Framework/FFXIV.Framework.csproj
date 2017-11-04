@@ -93,6 +93,7 @@
     <Compile Include="Common\TimerWorker.cs" />
     <Compile Include="Common\TreeSource.cs" />
     <Compile Include="Common\UnmanagedLibrary.cs" />
+    <Compile Include="Common\UpdateChecker.cs" />
     <Compile Include="Common\WavePlayer.cs" />
     <Compile Include="Common\WPFHelper.cs" />
     <Compile Include="Dialog\ColorDialogResult.cs" />
