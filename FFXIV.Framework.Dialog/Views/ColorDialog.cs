@@ -1,9 +1,6 @@
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
-
-using FirstFloor.ModernUI.Windows.Controls;
 
 namespace FFXIV.Framework.Dialog.Views
 {
@@ -25,16 +22,15 @@ namespace FFXIV.Framework.Dialog.Views
 
         public static bool? ShowDialog()
         {
-            var dialog = new ModernDialog
+            var dialog = new Dialog
             {
                 Title = "Colors ...",
                 Content = ColorDialog.content,
                 MaxWidth = 1280,
-                MaxHeight = 768,
+                MaxHeight = 770,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
             };
 
-            dialog.Buttons = new Button[] { dialog.OkButton, dialog.CancelButton };
             dialog.OkButton.Click += (s, e) => ColorDialog.content.Apply();
 
             return dialog.ShowDialog();
@@ -47,17 +43,16 @@ namespace FFXIV.Framework.Dialog.Views
                 WindowStartupLocation.CenterOwner :
                 WindowStartupLocation.CenterScreen;
 
-            var dialog = new ModernDialog
+            var dialog = new Dialog
             {
                 Title = "Colors ...",
                 Content = ColorDialog.content,
-                Owner = owner,
                 MaxWidth = 1280,
-                MaxHeight = 768,
+                MaxHeight = 770,
+                Owner = owner,
                 WindowStartupLocation = starupLocation,
             };
 
-            dialog.Buttons = new Button[] { dialog.OkButton, dialog.CancelButton };
             dialog.OkButton.Click += (s, e) => ColorDialog.content.Apply();
 
             return dialog.ShowDialog();
@@ -70,12 +65,12 @@ namespace FFXIV.Framework.Dialog.Views
                 WindowStartupLocation.CenterOwner :
                 WindowStartupLocation.CenterScreen;
 
-            var dialog = new ModernDialog
+            var dialog = new Dialog
             {
                 Title = "Colors ...",
                 Content = ColorDialog.content,
                 MaxWidth = 1280,
-                MaxHeight = 768,
+                MaxHeight = 770,
                 WindowStartupLocation = starupLocation,
             };
 
@@ -85,7 +80,6 @@ namespace FFXIV.Framework.Dialog.Views
                 helper.Owner = owner.Handle;
             }
 
-            dialog.Buttons = new Button[] { dialog.OkButton, dialog.CancelButton };
             dialog.OkButton.Click += (s, e) => ColorDialog.content.Apply();
 
             return dialog.ShowDialog();

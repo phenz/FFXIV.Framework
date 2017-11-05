@@ -17,7 +17,9 @@
   RenderOptions.EdgeMode="Unspecified">
 
   <UserControl.Resources>
-    <local:StringToDoubleConverter x:Key="S2DConverter" />
+    <ResourceDictionary>
+      <local:StringToDoubleConverter x:Key="S2DConverter" />
+    </ResourceDictionary>
   </UserControl.Resources>
 
   <UserControl.DataContext>
@@ -52,7 +54,7 @@
 
       <ListBox.ItemsPanel>
         <ItemsPanelTemplate>
-          <WrapPanel Width="810" />
+          <WrapPanel Width="840" />
         </ItemsPanelTemplate>
       </ListBox.ItemsPanel>
     </ListBox>

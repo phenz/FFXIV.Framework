@@ -16,7 +16,10 @@
   RenderOptions.EdgeMode="Unspecified">
 
   <UserControl.Resources>
-    <local:FontFamilyToNameConverter x:Key="FontFamilyToNameConverter" />
+    <ResourceDictionary>
+      <local:StringToDoubleConverter x:Key="S2DConverter" />
+      <local:FontFamilyToNameConverter x:Key="FontFamilyToNameConverter" />
+    </ResourceDictionary>
   </UserControl.Resources>
 
   <Grid>
@@ -68,24 +71,32 @@
         </ListBox>
       </StackPanel>
 
-      <StackPanel Grid.Column="1" Orientation="Vertical" Margin="0">
-        <Label Content="Font Size" Padding="0" Margin="6" />
-        <TextBox
-          x:Name="FontSizeTextBox"
-          Text="10.5"
-          Padding="0"
-          Margin="6"
-          TextAlignment="Right"
-          Width="60"
-          HorizontalAlignment="Left" />
+      <Grid Grid.Column="1">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto" />
+          <RowDefinition />
+        </Grid.RowDefinitions>
 
-        <Label Content="Font Style" Padding="0" Margin="6" />
+        <StackPanel Grid.Row="0" Orientation="Vertical" Margin="0">
+          <Label Content="Font Size" Padding="0" Margin="6" />
+          <TextBox
+            x:Name="FontSizeTextBox"
+            Text="10.5"
+            Padding="0"
+            Margin="6"
+            TextAlignment="Right"
+            Width="60"
+            HorizontalAlignment="Left" />
+        </StackPanel>
 
-        <ListBox Padding="0" Margin="6"
-          x:Name="FontStyleListBox"
-          ItemsSource="{Binding FamilyTypefaces}">
-        </ListBox>
-      </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0 0 0 8">
+          <Label Content="Font Style" Padding="0" Margin="6" />
+          <ListBox Padding="0" Margin="6"
+              x:Name="FontStyleListBox"
+              ItemsSource="{Binding FamilyTypefaces}">
+          </ListBox>
+        </StackPanel>
+      </Grid>
 
       <StackPanel Grid.Column="2" Orientation="Vertical" Margin="0">
         <Label Content="Preview" Padding="0" Margin="6" />
