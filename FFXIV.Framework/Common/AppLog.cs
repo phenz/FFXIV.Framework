@@ -116,6 +116,11 @@ namespace FFXIV.Framework.Common
                     return;
                 }
 
+                if (string.IsNullOrEmpty(fileName))
+                {
+                    return;
+                }
+
                 if (File.Exists(fileName))
                 {
                     LogManager.Configuration = new XmlLoggingConfiguration(fileName, true);
@@ -123,14 +128,20 @@ namespace FFXIV.Framework.Common
                     return;
                 }
 
-                var dir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-                if (!string.IsNullOrEmpty(fileName))
+                var dirs = new[]
+                {
+                    Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
+                    Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+                };
+
+                foreach (var dir in dirs)
                 {
                     var file = Path.Combine(dir, Path.GetFileName(fileName));
                     if (File.Exists(file))
                     {
                         LogManager.Configuration = new XmlLoggingConfiguration(file, true);
                         loaded = true;
+                        return;
                     }
                 }
             }
