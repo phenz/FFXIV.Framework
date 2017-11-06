@@ -8,6 +8,14 @@ namespace FFXIV.Framework.Dialog.Views
     {
         private static ColorDialogContent content = new ColorDialogContent();
 
+        private static Dialog dialog = new Dialog()
+        {
+            Title = "Colors ...",
+            Content = content,
+            MaxWidth = 1280,
+            MaxHeight = 770,
+        };
+
         public static Color Color
         {
             get => ColorDialog.content.Color;
@@ -22,18 +30,12 @@ namespace FFXIV.Framework.Dialog.Views
 
         public static bool? ShowDialog()
         {
-            var dialog = new Dialog
-            {
-                Title = "Colors ...",
-                Content = ColorDialog.content,
-                MaxWidth = 1280,
-                MaxHeight = 770,
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-            };
+            ColorDialog.dialog.Owner = null;
+            ColorDialog.dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-            dialog.OkButton.Click += (s, e) => ColorDialog.content.Apply();
+            ColorDialog.dialog.OkButton.Click += (s, e) => ColorDialog.content.Apply();
 
-            return dialog.ShowDialog();
+            return ColorDialog.dialog.ShowDialog();
         }
 
         public static bool? ShowDialog(
@@ -43,19 +45,12 @@ namespace FFXIV.Framework.Dialog.Views
                 WindowStartupLocation.CenterOwner :
                 WindowStartupLocation.CenterScreen;
 
-            var dialog = new Dialog
-            {
-                Title = "Colors ...",
-                Content = ColorDialog.content,
-                MaxWidth = 1280,
-                MaxHeight = 770,
-                Owner = owner,
-                WindowStartupLocation = starupLocation,
-            };
+            ColorDialog.dialog.Owner = owner;
+            ColorDialog.dialog.WindowStartupLocation = starupLocation;
 
-            dialog.OkButton.Click += (s, e) => ColorDialog.content.Apply();
+            ColorDialog.dialog.OkButton.Click += (s, e) => ColorDialog.content.Apply();
 
-            return dialog.ShowDialog();
+            return ColorDialog.dialog.ShowDialog();
         }
 
         public static bool? ShowDialog(
@@ -65,24 +60,17 @@ namespace FFXIV.Framework.Dialog.Views
                 WindowStartupLocation.CenterOwner :
                 WindowStartupLocation.CenterScreen;
 
-            var dialog = new Dialog
-            {
-                Title = "Colors ...",
-                Content = ColorDialog.content,
-                MaxWidth = 1280,
-                MaxHeight = 770,
-                WindowStartupLocation = starupLocation,
-            };
+            ColorDialog.dialog.WindowStartupLocation = starupLocation;
 
             if (owner != null)
             {
-                var helper = new WindowInteropHelper(dialog);
+                var helper = new WindowInteropHelper(ColorDialog.dialog);
                 helper.Owner = owner.Handle;
             }
 
-            dialog.OkButton.Click += (s, e) => ColorDialog.content.Apply();
+            ColorDialog.dialog.OkButton.Click += (s, e) => ColorDialog.content.Apply();
 
-            return dialog.ShowDialog();
+            return ColorDialog.dialog.ShowDialog();
         }
     }
 }
