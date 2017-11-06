@@ -6,71 +6,88 @@ namespace FFXIV.Framework.Dialog.Views
 {
     public static class ColorDialog
     {
-        private static ColorDialogContent content = new ColorDialogContent();
-
-        private static Dialog Dialog => new Dialog()
+        private static ColorDialogContent CreateContent() => new ColorDialogContent()
         {
-            Title = "Colors ...",
+            Color = Color,
+            IgnoreAlpha = IgnoreAlpha,
+        };
+
+        private static Dialog CreateDialog(ColorDialogContent content) => new Dialog()
+        {
+            Title = "Color",
             Content = content,
             MaxWidth = 1280,
             MaxHeight = 770,
         };
 
-        public static Color Color
-        {
-            get => ColorDialog.content.Color;
-            set => ColorDialog.content.Color = value;
-        }
+        public static Color Color { get; set; }
 
-        public static bool IgnoreAlpha
-        {
-            get => ColorDialog.content.IgnoreAlpha;
-            set => ColorDialog.content.IgnoreAlpha = value;
-        }
+        public static bool IgnoreAlpha { get; set; }
 
         public static bool? ShowDialog()
         {
-            ColorDialog.Dialog.Owner = null;
-            ColorDialog.Dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            var content = CreateContent();
+            var dialog = CreateDialog(content);
 
-            ColorDialog.Dialog.OkButton.Click += (s, e) => ColorDialog.content.Apply();
+            dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-            return ColorDialog.Dialog.ShowDialog();
+            dialog.OkButton.Click += (x, y) => content.Apply();
+
+            var result = dialog.ShowDialog();
+            if (result.Value)
+            {
+                Color = content.Color;
+            }
+
+            return result;
         }
 
         public static bool? ShowDialog(
             Window owner)
         {
-            var starupLocation = owner != null ?
+            var content = CreateContent();
+            var dialog = CreateDialog(content);
+
+            dialog.WindowStartupLocation = owner != null ?
                 WindowStartupLocation.CenterOwner :
                 WindowStartupLocation.CenterScreen;
 
-            ColorDialog.Dialog.Owner = owner;
-            ColorDialog.Dialog.WindowStartupLocation = starupLocation;
+            dialog.OkButton.Click += (x, y) => content.Apply();
 
-            ColorDialog.Dialog.OkButton.Click += (s, e) => ColorDialog.content.Apply();
+            var result = dialog.ShowDialog();
+            if (result.Value)
+            {
+                Color = content.Color;
+            }
 
-            return ColorDialog.Dialog.ShowDialog();
+            return result;
         }
 
         public static bool? ShowDialog(
             System.Windows.Forms.Form owner)
         {
-            var starupLocation = owner != null ?
+            var content = CreateContent();
+            var dialog = CreateDialog(content);
+
+            dialog.WindowStartupLocation = owner != null ?
                 WindowStartupLocation.CenterOwner :
                 WindowStartupLocation.CenterScreen;
 
-            ColorDialog.Dialog.WindowStartupLocation = starupLocation;
-
             if (owner != null)
             {
-                var helper = new WindowInteropHelper(ColorDialog.Dialog);
+                var helper = new WindowInteropHelper(dialog);
                 helper.Owner = owner.Handle;
             }
 
-            ColorDialog.Dialog.OkButton.Click += (s, e) => ColorDialog.content.Apply();
+            dialog.OkButton.Click += (x, y) => content.Apply();
 
-            return ColorDialog.Dialog.ShowDialog();
+            var result = dialog.ShowDialog();
+            if (result.Value)
+            {
+                Color = content.Color;
+            }
+
+            return result;
         }
     }
 }

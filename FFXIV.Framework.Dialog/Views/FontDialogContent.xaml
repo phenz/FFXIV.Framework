@@ -60,7 +60,7 @@
       </Grid.ColumnDefinitions>
 
       <StackPanel Grid.Column="0" Orientation="Vertical" Margin="0">
-        <Label Content="Font Family" Padding="0" Margin="6" />
+        <Label Content="Font Family" Padding="0" Margin="6" FontWeight="ExtraBold" />
 
         <ListBox Padding="0" Margin="6"
           x:Name="FontFamilyListBox"
@@ -78,7 +78,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Vertical" Margin="0">
-          <Label Content="Font Size" Padding="0" Margin="6" />
+          <Label Content="Font Size" Padding="0" Margin="6" FontWeight="ExtraBold" />
           <TextBox
             x:Name="FontSizeTextBox"
             Text="10.5"
@@ -90,7 +90,7 @@
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0 0 0 8">
-          <Label Content="Font Style" Padding="0" Margin="6" />
+          <Label Content="Font Style" Padding="0" Margin="6" FontWeight="ExtraBold" />
           <ListBox Padding="0" Margin="6"
               x:Name="FontStyleListBox"
               ItemsSource="{Binding FamilyTypefaces}">
@@ -99,7 +99,7 @@
       </Grid>
 
       <StackPanel Grid.Column="2" Orientation="Vertical" Margin="0">
-        <Label Content="Preview" Padding="0" Margin="6" />
+        <Label Content="Preview" Padding="0" Margin="6" FontWeight="ExtraBold" />
 
         <TextBox
           x:Name="PreviewTextBlock"

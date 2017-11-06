@@ -6,66 +6,85 @@ namespace FFXIV.Framework.Dialog.Views
 {
     public static class FontDialog
     {
-        private static FontDialogContent content = new FontDialogContent();
-
-        private static Dialog Dialog => new Dialog()
+        private static FontDialogContent CreateContent() => new FontDialogContent()
         {
-            Title = "Fonts ...",
+            FontInfo = FontDialog.Font,
+        };
+
+        private static Dialog CreateDialog(FontDialogContent content) => new Dialog()
+        {
+            Title = "Font",
             Content = content,
             MaxWidth = 1280,
             MaxHeight = 770,
         };
 
-        public static FontInfo Font
-        {
-            get => FontDialog.content.FontInfo;
-            set => FontDialog.content.FontInfo = value;
-        }
+        public static FontInfo Font { get; set; }
 
         public static bool? ShowDialog()
         {
-            FontDialog.Dialog.Owner = null;
-            FontDialog.Dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            var content = CreateContent();
+            var dialog = CreateDialog(content);
 
-            FontDialog.Dialog.OkButton.Click += FontDialog.content.OKBUtton_Click;
+            dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-            return FontDialog.Dialog.ShowDialog();
+            dialog.OkButton.Click += content.OKBUtton_Click;
+
+            var result = dialog.ShowDialog();
+            if (result.Value)
+            {
+                Font = content.FontInfo;
+            }
+
+            return result;
         }
 
         public static bool? ShowDialog(
             Window owner)
         {
-            var starupLocation = owner != null ?
+            var content = CreateContent();
+            var dialog = CreateDialog(content);
+
+            dialog.WindowStartupLocation = owner != null ?
                 WindowStartupLocation.CenterOwner :
                 WindowStartupLocation.CenterScreen;
 
-            FontDialog.Dialog.Owner = null;
-            FontDialog.Dialog.WindowStartupLocation = starupLocation;
+            dialog.OkButton.Click += content.OKBUtton_Click;
 
-            FontDialog.Dialog.OkButton.Click += FontDialog.content.OKBUtton_Click;
+            var result = dialog.ShowDialog();
+            if (result.Value)
+            {
+                Font = content.FontInfo;
+            }
 
-            return FontDialog.Dialog.ShowDialog();
+            return result;
         }
 
         public static bool? ShowDialog(
             System.Windows.Forms.Form owner)
         {
-            var starupLocation = owner != null ?
+            var content = CreateContent();
+            var dialog = CreateDialog(content);
+
+            dialog.WindowStartupLocation = owner != null ?
                 WindowStartupLocation.CenterOwner :
                 WindowStartupLocation.CenterScreen;
 
-            FontDialog.Dialog.Owner = null;
-            FontDialog.Dialog.WindowStartupLocation = starupLocation;
-
             if (owner != null)
             {
-                var helper = new WindowInteropHelper(FontDialog.Dialog);
+                var helper = new WindowInteropHelper(dialog);
                 helper.Owner = owner.Handle;
             }
 
-            FontDialog.Dialog.OkButton.Click += FontDialog.content.OKBUtton_Click;
+            dialog.OkButton.Click += content.OKBUtton_Click;
 
-            return FontDialog.Dialog.ShowDialog();
+            var result = dialog.ShowDialog();
+            if (result.Value)
+            {
+                Font = content.FontInfo;
+            }
+
+            return result;
         }
     }
 }
