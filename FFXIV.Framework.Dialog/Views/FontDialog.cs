@@ -8,7 +8,7 @@ namespace FFXIV.Framework.Dialog.Views
     {
         private static FontDialogContent content = new FontDialogContent();
 
-        private static Dialog dialog = new Dialog()
+        private static Dialog Dialog => new Dialog()
         {
             Title = "Fonts ...",
             Content = content,
@@ -24,12 +24,12 @@ namespace FFXIV.Framework.Dialog.Views
 
         public static bool? ShowDialog()
         {
-            FontDialog.dialog.Owner = null;
-            FontDialog.dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            FontDialog.Dialog.Owner = null;
+            FontDialog.Dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-            FontDialog.dialog.OkButton.Click += FontDialog.content.OKBUtton_Click;
+            FontDialog.Dialog.OkButton.Click += FontDialog.content.OKBUtton_Click;
 
-            return FontDialog.dialog.ShowDialog();
+            return FontDialog.Dialog.ShowDialog();
         }
 
         public static bool? ShowDialog(
@@ -39,12 +39,12 @@ namespace FFXIV.Framework.Dialog.Views
                 WindowStartupLocation.CenterOwner :
                 WindowStartupLocation.CenterScreen;
 
-            FontDialog.dialog.Owner = null;
-            FontDialog.dialog.WindowStartupLocation = starupLocation;
+            FontDialog.Dialog.Owner = null;
+            FontDialog.Dialog.WindowStartupLocation = starupLocation;
 
-            FontDialog.dialog.OkButton.Click += FontDialog.content.OKBUtton_Click;
+            FontDialog.Dialog.OkButton.Click += FontDialog.content.OKBUtton_Click;
 
-            return FontDialog.dialog.ShowDialog();
+            return FontDialog.Dialog.ShowDialog();
         }
 
         public static bool? ShowDialog(
@@ -54,18 +54,18 @@ namespace FFXIV.Framework.Dialog.Views
                 WindowStartupLocation.CenterOwner :
                 WindowStartupLocation.CenterScreen;
 
-            FontDialog.dialog.Owner = null;
-            FontDialog.dialog.WindowStartupLocation = starupLocation;
+            FontDialog.Dialog.Owner = null;
+            FontDialog.Dialog.WindowStartupLocation = starupLocation;
 
             if (owner != null)
             {
-                var helper = new WindowInteropHelper(FontDialog.dialog);
+                var helper = new WindowInteropHelper(FontDialog.Dialog);
                 helper.Owner = owner.Handle;
             }
 
-            FontDialog.dialog.OkButton.Click += FontDialog.content.OKBUtton_Click;
+            FontDialog.Dialog.OkButton.Click += FontDialog.content.OKBUtton_Click;
 
-            return FontDialog.dialog.ShowDialog();
+            return FontDialog.Dialog.ShowDialog();
         }
     }
 }

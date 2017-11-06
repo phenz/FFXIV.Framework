@@ -8,7 +8,7 @@ namespace FFXIV.Framework.Dialog.Views
     {
         private static ColorDialogContent content = new ColorDialogContent();
 
-        private static Dialog dialog = new Dialog()
+        private static Dialog Dialog => new Dialog()
         {
             Title = "Colors ...",
             Content = content,
@@ -30,12 +30,12 @@ namespace FFXIV.Framework.Dialog.Views
 
         public static bool? ShowDialog()
         {
-            ColorDialog.dialog.Owner = null;
-            ColorDialog.dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            ColorDialog.Dialog.Owner = null;
+            ColorDialog.Dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-            ColorDialog.dialog.OkButton.Click += (s, e) => ColorDialog.content.Apply();
+            ColorDialog.Dialog.OkButton.Click += (s, e) => ColorDialog.content.Apply();
 
-            return ColorDialog.dialog.ShowDialog();
+            return ColorDialog.Dialog.ShowDialog();
         }
 
         public static bool? ShowDialog(
@@ -45,12 +45,12 @@ namespace FFXIV.Framework.Dialog.Views
                 WindowStartupLocation.CenterOwner :
                 WindowStartupLocation.CenterScreen;
 
-            ColorDialog.dialog.Owner = owner;
-            ColorDialog.dialog.WindowStartupLocation = starupLocation;
+            ColorDialog.Dialog.Owner = owner;
+            ColorDialog.Dialog.WindowStartupLocation = starupLocation;
 
-            ColorDialog.dialog.OkButton.Click += (s, e) => ColorDialog.content.Apply();
+            ColorDialog.Dialog.OkButton.Click += (s, e) => ColorDialog.content.Apply();
 
-            return ColorDialog.dialog.ShowDialog();
+            return ColorDialog.Dialog.ShowDialog();
         }
 
         public static bool? ShowDialog(
@@ -60,17 +60,17 @@ namespace FFXIV.Framework.Dialog.Views
                 WindowStartupLocation.CenterOwner :
                 WindowStartupLocation.CenterScreen;
 
-            ColorDialog.dialog.WindowStartupLocation = starupLocation;
+            ColorDialog.Dialog.WindowStartupLocation = starupLocation;
 
             if (owner != null)
             {
-                var helper = new WindowInteropHelper(ColorDialog.dialog);
+                var helper = new WindowInteropHelper(ColorDialog.Dialog);
                 helper.Owner = owner.Handle;
             }
 
-            ColorDialog.dialog.OkButton.Click += (s, e) => ColorDialog.content.Apply();
+            ColorDialog.Dialog.OkButton.Click += (s, e) => ColorDialog.content.Apply();
 
-            return ColorDialog.dialog.ShowDialog();
+            return ColorDialog.Dialog.ShowDialog();
         }
     }
 }
