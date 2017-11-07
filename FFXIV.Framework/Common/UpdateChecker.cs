@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using FFXIV.Framework.Extensions;
+using NLog;
 
 namespace FFXIV.Framework.Common
 {
@@ -16,6 +17,12 @@ namespace FFXIV.Framework.Common
     /// </summary>7
     public static class UpdateChecker
     {
+        #region Logger
+
+        private static Logger Logger => AppLog.DefaultLogger;
+
+        #endregion Logger
+
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static dynamic GetHojoring()
         {
@@ -78,6 +85,12 @@ namespace FFXIV.Framework.Common
                 var hojoring = GetHojoring();
                 if (hojoring != null)
                 {
+                    var ver = hojoring.Version as Version;
+                    if (ver != null)
+                    {
+                        Logger.Trace($"*** Hojoring v{ver.Major}.{ver.Minor}.{ver.Revision} ***");
+                    }
+
                     hojoring.ShowSplash();
                 }
             }

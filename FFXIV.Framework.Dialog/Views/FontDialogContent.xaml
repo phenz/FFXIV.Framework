@@ -5,9 +5,11 @@
   xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
   xmlns:local="clr-namespace:FFXIV.Framework.Dialog.Views"
   FontFamily="Arial, メイリオ"
+  FontSize="16"
   SnapsToDevicePixels="True"
+  Background="White"
   Width="1024"
-  Height="460"
+  Height="480"
   TextOptions.TextFormattingMode="Display"
   TextOptions.TextHintingMode="Auto"
   TextOptions.TextRenderingMode="ClearType"
@@ -28,20 +30,21 @@
         <Label
           Content="{Binding Converter={StaticResource FontFamilyToNameConverter}, Mode=OneWay}"
           FontFamily="{Binding Source}"
-          FontSize="12.0"
-          Height="22"
+          FontSize="16.5"
+          Height="26"
           Margin="0"
           Padding="0"
+          VerticalAlignment="Center"
           VerticalContentAlignment="Center" />
       </DataTemplate>
 
       <DataTemplate DataType="{x:Type FamilyTypeface}">
         <WrapPanel>
-          <TextBlock Text="{Binding Style}" />
+          <TextBlock Text="{Binding Style, Mode=OneWay}" />
           <TextBlock Text="-" />
-          <TextBlock Text="{Binding Weight}" />
+          <TextBlock Text="{Binding Weight, Mode=OneWay}" />
           <TextBlock Text="-" />
-          <TextBlock Text="{Binding Stretch}" />
+          <TextBlock Text="{Binding Stretch, Mode=OneWay}" />
         </WrapPanel>
       </DataTemplate>
 
@@ -54,23 +57,29 @@
 
     <Grid DataContext="{StaticResource familyCollection}">
       <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="300" />
-        <ColumnDefinition Width="230" />
+        <ColumnDefinition Width="320" />
+        <ColumnDefinition Width="270" />
         <ColumnDefinition />
       </Grid.ColumnDefinitions>
 
-      <StackPanel Grid.Column="0" Orientation="Vertical" Margin="0">
-        <Label Content="Font Family" Padding="0" Margin="6" FontWeight="ExtraBold" />
+      <Grid Grid.Column="0">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto" />
+          <RowDefinition />
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Content="Font Family" Padding="0" Margin="6" FontWeight="ExtraBold" />
 
-        <ListBox Padding="0" Margin="6"
+        <ListBox 
+          Grid.Row="1"
+          Padding="0" Margin="6"
           x:Name="FontFamilyListBox"
           Background="Transparent"
           ItemsSource="{Binding}"
-          Height="420"
+          Height="435"
           ItemTemplate="{StaticResource fontFamilyData}">
         </ListBox>
-      </StackPanel>
-
+      </Grid>
+            
       <Grid Grid.Column="1">
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto" />
@@ -85,27 +94,45 @@
             Padding="0"
             Margin="6"
             TextAlignment="Right"
-            Width="60"
+            Width="70"
+            FontSize="18"
+            Height="30"
+            HorizontalContentAlignment="Right"
+            VerticalContentAlignment="Center"
             HorizontalAlignment="Left" />
         </StackPanel>
 
-        <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0 0 0 8">
-          <Label Content="Font Style" Padding="0" Margin="6" FontWeight="ExtraBold" />
-          <ListBox Padding="0" Margin="6"
-              x:Name="FontStyleListBox"
-              ItemsSource="{Binding FamilyTypefaces}">
+        <Grid Grid.Row="1">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+          </Grid.RowDefinitions>
+          <Label Grid.Row="0" Content="Font Style" Padding="0" Margin="6" FontWeight="ExtraBold" />
+          <ListBox 
+            Grid.Row="1"
+            Padding="0" Margin="6"
+            x:Name="FontStyleListBox"
+            ScrollViewer.VerticalScrollBarVisibility="Auto"
+            ItemsSource="{Binding FamilyTypefaces, Mode=OneWay}">
           </ListBox>
-        </StackPanel>
+        </Grid>
       </Grid>
 
-      <StackPanel Grid.Column="2" Orientation="Vertical" Margin="0">
-        <Label Content="Preview" Padding="0" Margin="6" FontWeight="ExtraBold" />
+      <Grid Grid.Column="2">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto" />
+          <RowDefinition />
+        </Grid.RowDefinitions>
+        
+        <Label
+          Grid.Row="0"
+          Content="Preview" Padding="0" Margin="6" FontWeight="ExtraBold" />
 
         <TextBox
+          Grid.Row="1"
           x:Name="PreviewTextBlock"
           Padding="0" Margin="6"
           IsTabStop="False"
-          Height="420"
           FontSize="{Binding Text, ElementName=FontSizeTextBox}"
           FontFamily="{Binding Source, Source={StaticResource familyCollection}}"
           FontWeight="{Binding SelectedItem.Weight, ElementName=FontStyleListBox}"
@@ -118,7 +145,7 @@
             <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.WindowTextColorKey}}" />
           </TextBox.Foreground>
         </TextBox>
-      </StackPanel>
+      </Grid>
     </Grid>
   </Grid>
 </UserControl>

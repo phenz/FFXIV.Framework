@@ -14,7 +14,7 @@
   RenderOptions.EdgeMode="Unspecified"
   WindowStyle="SingleBorderWindow"
   ShowInTaskbar="True"
-  ResizeMode="CanMinimize"
+  ResizeMode="CanResizeWithGrip"
   MaxHeight="770"
   Title="Dialog"
   SizeToContent="WidthAndHeight">
